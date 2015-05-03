@@ -1,0 +1,10 @@
+p { text-align: center; }
+h1, h2 { text-align: center; }
+body { font-family: Helvetica Neue, Helvetica, Sans-Serif; }
+#time_left_header { margin-bottom: -1em; }
+#utcClock, #countdown {
+  padding: 50px;
+  font-size: 3em;
+  color: red;
+  background: black;
+}

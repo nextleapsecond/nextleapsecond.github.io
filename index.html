@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Leap second countdown</title>
+  <link rel="stylesheet" href="main.css" />
+</head>
+<body>
+<h1>Leap second countdown</h1>
+<p id="nextWillHappenText">The next leap second will happen 2015 June 30th 23:59:60 UTC.</p>
+<p id="previousLeapSecondText" style="display: none;">The last leap second happened 2015 June 30th 23:59:60 UTC. So far the next leap second has not yet been announced.</p>
+<h2 id="time_left_header">Time left:</h2>
+<p id="countdown">0 days 0 hours 0 minutes 0 seconds</p>
+
+<p>Leap seconds are announced by the INTERNATIONAL EARTH ROTATION AND REFERENCE SYSTEMS SERVICE (IERS)</p>
+
+<script>
+  var next_leap_second = Date.UTC(2015, 6, 1, 0, 0, 0);
+
+  // Pad number with zeroes
+  function pad(n, width, z) {
+    z = z || '0';
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+  }
+
+  function utcTime() {
+    now = new Date();
+
+    ms_to_leap_second = next_leap_second - now;
+    if ((ms_to_leap_second > -200) && !(ms_to_leap_second < -1000)) {
+      displayCountdown(ms_to_leap_second);
+    }
+    if (ms_to_leap_second < 0) {
+      document.getElementById("nextWillHappenText").setAttribute('style', "display: none;");
+      document.getElementById("previousLeapSecondText").setAttribute('style', "display: block;");
+    }
+  }
+
+  function displayCountdown(total_ms) {
+    if(total_ms < 0) { total_ms = 0; } // avoid negative numbers
+    days = daysRemain(total_ms/1000);
+    hours = hoursRemain(total_ms/1000);
+    mins = minsRemain(total_ms/1000);
+    secs = secsRemain(total_ms/1000);
+    ms = total_ms - Math.floor(total_ms/1000)*1000;
+    buf = days + " days, " + hours + " hours, " + mins + " minutes, " + secs+"."+ pad(ms,3) + " seconds ";
+    document.getElementById("countdown").innerHTML = buf;
+  }
+
+  function daysRemain(secs) { return Math.floor(secs/86400); }
+  function hoursRemain(secs) {
+    rest = secs - daysRemain(secs)*86400;
+    return Math.floor(rest/3600);
+  }
+  function minsRemain(secs) {
+    rest = secs - daysRemain(secs)*86400;
+    rest = rest - hoursRemain(secs)*3600;
+    return Math.floor(rest/60);
+  }
+  function secsRemain(secs) {
+    rest = secs - daysRemain(secs)*86400;
+    rest = rest - hoursRemain(secs)*3600;
+    rest = rest - minsRemain(secs)*60;
+    return Math.floor(rest);
+  }
+
+  setInterval(utcTime, 50);
+</script>
+</body>
+</html>
