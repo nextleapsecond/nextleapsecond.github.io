@@ -9,3 +9,4 @@ body { font-family: Helvetica Neue, Helvetica, Sans-Serif; }
   background: black;
 }
 .ads { text-align: center; margin-top: 3em; }
+.ads { display: none; }
